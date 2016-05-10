@@ -44,6 +44,18 @@ namespace PostToEventHub
                 UrlNotifier.SetNotify(opts.NotifyUrl, TimeSpan.FromSeconds(60));
             }
 
+            if (!string.IsNullOrEmpty(opts.SignalRURL))
+            {
+                try
+                {
+                    SignalRClient.SetSignalR(opts.SignalRURL, opts.SignalRHubName, opts.SignalREvent);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error setting up SignalR: " + ex.Message);
+                }
+            }
+
             Console.ReadLine();
         }
     }
