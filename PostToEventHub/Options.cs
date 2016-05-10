@@ -16,5 +16,13 @@ namespace PostToEventHub
         [Option('p', "port", Required = true,
             HelpText = "Port to listen on")]
         public int Port { get; set; }
+
+        [Option('i', "ipprefix", Required = false,
+            HelpText = "IP prefixes preference")]
+        public string IpPrefixes { get; set; }
+
+        [Option('u', "notifyurl", Required = false,
+            HelpText = "Notify URL (will be called every minute)")]
+        public string NotifyUrl { get; set; }
     }
 }

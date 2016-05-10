@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CommandLine;
 using Microsoft.Owin.Hosting;
 
 namespace PostToEventHub
@@ -14,7 +15,15 @@ namespace PostToEventHub
         static void Main(string[] args)
         {
             Options opts = new Options();
-            var result = CommandLine.Parser.Default.ParseArguments(args, opts);
+            var parser = new Parser(config => config.HelpWriter = Console.Out);
+            var result = parser.ParseArguments(args, opts);
+
+            if (!result)
+            {
+                Console.WriteLine("Invalid arguments");
+                return;
+            }
+
             Program.Options = opts;
 
             Console.WriteLine("Hub = " + opts.EventHubConnectionString);
@@ -28,6 +37,11 @@ namespace PostToEventHub
             catch (Exception ex)
             {
                 Console.WriteLine("Exception starting server on " + baseAddress + ": " + ex.ToString());
+            }
+
+            if (!string.IsNullOrEmpty(opts.NotifyUrl))
+            {
+                UrlNotifier.SetNotify(opts.NotifyUrl, TimeSpan.FromSeconds(60));
             }
 
             Console.ReadLine();
