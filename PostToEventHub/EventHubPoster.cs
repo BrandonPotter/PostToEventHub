@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ServiceBus.Messaging;
@@ -27,6 +28,24 @@ namespace PostToEventHub
             if (!string.IsNullOrEmpty(Program.Options.PostgreSqlServerConnectionString))
             {
                 PostPostgreSqlData(jsonString);
+            }
+
+            if (!string.IsNullOrEmpty(Program.Options.PostRelayToUrl))
+            {
+                PostRelayUrl(jsonString);
+            }
+        }
+
+        private static void PostRelayUrl(string jsonString)
+        {
+            try
+            {
+                var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                new HttpClient().PostAsync(Program.Options.PostRelayToUrl, httpContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception relay POST to URL: " + ex.Message);
             }
         }
 

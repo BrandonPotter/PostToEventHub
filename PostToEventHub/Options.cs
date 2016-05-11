@@ -56,5 +56,9 @@ namespace PostToEventHub
         [Option("postgresqlpostquery", Required = false,
             HelpText = "PostgreSQL POST query")]
         public string PostgreSqlPostQuery { get; set; }
+
+        [Option("postrelaytourl", Required = false,
+            HelpText = "Post Relay to URL")]
+        public string PostRelayToUrl { get; set; }
     }
 }
